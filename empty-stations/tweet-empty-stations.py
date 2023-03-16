@@ -32,7 +32,11 @@ def tweet_empty_stations():
     station_information_url = "https://gbfs.mex.lyftbikes.com/gbfs/es/station_information.json"
 
     number_of_stations = 0
+    number_of_working_stations = 0
     number_of_empty_stations = 0
+    number_of_available_bikes = 0
+    number_of_disabled_bikes = 0
+    total_bikes_available = 0
     empty_stations = []
 
     response = requests.get(station_status_url)
@@ -48,16 +52,23 @@ def tweet_empty_stations():
 
     # Find the station(s) where num_bikes_available is 0
     for station in station_status_data['data']['stations']:
-        if station['num_bikes_available'] == 0:
-            # Print the name of the station
-            number_of_empty_stations += 1
-            empty_stations.append(name_dict[station['station_id']])
+        if station['is_installed'] == 1 and station['is_renting'] == 1:
+            number_of_working_stations += 1
+            if station['num_bikes_available'] == 0:
+                # Print the name of the station
+                number_of_empty_stations += 1
+                empty_stations.append(name_dict[station['station_id']])
+        number_of_available_bikes += station['num_bikes_available']
+        number_of_disabled_bikes += station['num_bikes_disabled']
 
+    total_bikes_available = number_of_available_bikes - number_of_disabled_bikes
     number_of_stations = len(station_status_data["data"]["stations"])
 
-    message = "📢 Estatus Ecobici\nTotal estaciones: " + \
-        str(number_of_stations)+", sin bicicletas: " + \
-        str(number_of_empty_stations)+"\n@ecobici @HSBC_MX\n"
+    message = "📢 Estatus Ecobici\nTotal estaciones habilitadas: " + \
+        str(number_of_working_stations)+"\nTotal estaciones existentes: " + str(number_of_stations) + \
+        "\nTotal estaciones habilitadas sin bicicletas: " + \
+        str(number_of_empty_stations)+"\nTotal de bicicletas disponibles en estación: " + \
+        str(total_bikes_available)+"\n@ecobici @HSBC_MX\n"
 
     # TODO: Tweet the empty stations
 
