@@ -16,7 +16,7 @@ def _get_TW_apis_key(description):
     return config["twitter"][description]
 
 
-def tweet_empty_stations():
+def tweet_empty_stations(event, context):
     consumer_key = _get_TW_apis_key("consumer_key")
     consumer_secret = _get_TW_apis_key("consumer_secret")
 
@@ -91,4 +91,4 @@ def tweet_empty_stations():
     # print(message)
 
 
-tweet_empty_stations()
+#tweet_empty_stations()
