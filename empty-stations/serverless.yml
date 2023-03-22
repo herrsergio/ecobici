@@ -31,4 +31,4 @@ functions:
     ecobiciStatus:
         handler: tweet-empty-stations.tweet_empty_stations
         events:
-            - schedule: cron(0 10,14,17,20,1,4 * * ? *)
+            - schedule: cron(0 1,4,10,14,17,20 * * ? *)
