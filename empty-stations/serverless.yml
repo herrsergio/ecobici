@@ -14,12 +14,8 @@
 service: ecobiciStatus
 
 plugins:
-    - serverless-python-requirements
-
-#custom:
-#    pythonRequirements:
-#        dockerizePip: non-linux
-
+  - serverless-python-requirements
+  - serverless-local-schedule
 provider:
     name: aws
     runtime: python3.9
@@ -36,3 +32,4 @@ functions:
                   - cron(25 6-23 * * ? *)
                   - cron(5 5 * * ? *)
                   - cron(25 0 * * ? *)
+                timezone: America/Mexico_City
