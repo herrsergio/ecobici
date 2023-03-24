@@ -38,6 +38,7 @@ def tweet_empty_stations(event, context):
     number_of_disabled_bikes = 0
     total_bikes_available = 0
     empty_stations = []
+    number_of_stations_with_less_2_bikes = 0
 
     response = requests.get(station_status_url)
     station_status_data = json.loads(response.text)
@@ -58,17 +59,19 @@ def tweet_empty_stations(event, context):
                 # Print the name of the station
                 number_of_empty_stations += 1
                 empty_stations.append(name_dict[station['station_id']])
+            if station['num_bikes_available'] > 0 and station['num_bikes_available'] <= 2:
+                number_of_stations_with_less_2_bikes += 1
         number_of_available_bikes += station['num_bikes_available']
         number_of_disabled_bikes += station['num_bikes_disabled']
 
     total_bikes_available = number_of_available_bikes - number_of_disabled_bikes
     number_of_stations = len(station_status_data["data"]["stations"])
 
-    message = "📢 Estatus Ecobici\nTotal estaciones habilitadas: " + \
+    message = "📢 Estatus Ecobici 🚲\nTotal estaciones habilitadas: " + \
         str(number_of_working_stations)+"\nTotal estaciones existentes: " + str(number_of_stations) + \
         "\nTotal estaciones habilitadas sin bicicletas: " + \
         str(number_of_empty_stations)+"\nTotal de bicicletas disponibles en estación: " + \
-        str(total_bikes_available)+"\n@ecobici @HSBC_MX\n"
+        str(total_bikes_available)+"\nTotal de estaciones con <= 2 🚲: "+str(number_of_stations_with_less_2_bikes)+"\n@ecobici @HSBC_MX #ecobici\n"
 
     # TODO: Tweet the empty stations
 
