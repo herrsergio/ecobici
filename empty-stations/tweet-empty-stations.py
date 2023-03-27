@@ -74,7 +74,7 @@ def tweet_empty_stations(event, context):
         "\nTotal estaciones habilitadas sin bicicletas: " + \
         str(number_of_empty_stations)+"\nTotal de bicicletas disponibles en estación: " + \
         str(total_bikes_available)+"\nTotal de estaciones con <= 2 🚲: " +str(number_of_stations_with_less_2_bikes) + \
-        "Total de anclajes en el sistema: " + str(total_docks_available) + "\n@ecobici @HSBC_MX #ecobici\n"
+        "\nTotal anclajes: " + str(total_docks_available) + "\n@ecobici @HSBC_MX #ecobici\n"
 
     # TODO: Tweet the empty stations
 
