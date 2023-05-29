@@ -9,7 +9,10 @@ def _get_TW_apis_key(description):
     """Fetch the API key from your configuration file.
     Expects a configuration file named "secrets.ini" with structure:
         [twitter]
-        api_key=<YOUR-OPENWEATHER-API-KEY>
+        consumer_key=
+        consumer_secret=
+        access_token=
+        access_token_secret=
     """
     config = ConfigParser()
     config.read("secrets.ini")
@@ -22,11 +25,12 @@ def tweet_empty_stations(event, context):
 
     access_token = _get_TW_apis_key("access_token")
     access_token_secret = _get_TW_apis_key("access_token_secret")
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    auth.secure = True
-    auth.set_access_token(access_token, access_token_secret)
 
-    api = tweepy.API(auth)
+    client = tweepy.Client(
+        consumer_key=consumer_key, consumer_secret=consumer_secret,
+        access_token=access_token, access_token_secret=access_token_secret
+    )
+
 
     station_status_url = "https://gbfs.mex.lyftbikes.com/gbfs/es/station_status.json"
     station_information_url = "https://gbfs.mex.lyftbikes.com/gbfs/es/station_information.json"
@@ -93,7 +97,7 @@ def tweet_empty_stations(event, context):
     #    print(count)
     #    print(tweet)
 
-    api.update_status(status=message)
+    client.create_tweet(text=message)
     # print(message)
 
 
